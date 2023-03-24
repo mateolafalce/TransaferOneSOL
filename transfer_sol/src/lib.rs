@@ -28,10 +28,10 @@ pub mod transfer_one_sol {
 #[derive(Accounts)]
 pub struct Transaction<'info> {
     pub system_program: Program<'info, System>,
-    /// CHECK: This is not dangerous because we don't read or write from this account
+    /// CHECK: This is the signer
     #[account(mut, signer)]
     pub from: AccountInfo<'info>,
-    /// CHECK: This is not dangerous because we don't read or write from this account
+    /// CHECK: This is receiver
     #[account(mut)]
     pub to: AccountInfo<'info>,
 }

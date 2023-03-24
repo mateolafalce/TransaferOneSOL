@@ -14,8 +14,49 @@ The importance of decentralized development of something as critical as payment 
 
 To sign, the user's private key is required, which must be requested in JSON format. After obtaining the signature, the Solana system program is called to make a modification of the accounts in question, specifically their balance, and then the gas fee for the respective transaction will be paid.
 
-A message for the recipient is requested as input (which will later be printed via msg!). A variable that manages the sending of SOL could be dynamically implemented as an argument.
-
-This program assumes that the developer who wants to implement this in their business or personal project has an HTTPS protocol with p2p encryption or runs the program locally on a computer without distribution to servers.
+<h3 align="center">Transfer program</h3>
 
 </div>
+
+```rust
+#[program]
+pub mod transfer_one_sol {
+    use super::*;
+
+    pub fn send_one_sol(ctx: Context<Transaction>, msg: String) -> Result<()> {
+        let transfer = anchor_lang::solana_program::system_instruction::transfer(
+            &ctx.accounts.from.key(),
+            &ctx.accounts.to.key(),
+            1000000000,
+        );
+        anchor_lang::solana_program::program::invoke(
+            &transfer,
+            &[
+                ctx.accounts.from.to_account_info(),
+                ctx.accounts.to.to_account_info().clone(),
+            ],
+        )
+        .expect("Error");
+        msg!("{}", msg);
+        Ok(())
+    }
+}
+
+#[derive(Accounts)]
+pub struct Transaction<'info> {
+    pub system_program: Program<'info, System>,
+    /// CHECK: This is the signer
+    #[account(mut, signer)]
+    pub from: AccountInfo<'info>,
+    /// CHECK: This is receiver
+    #[account(mut)]
+    pub to: AccountInfo<'info>,
+}
+```
+This function and its related structure define a transaction that sends a fixed amount of Solana cryptocurrency (1 SOL) from a source account to a destination account. The send_one_sol function takes two arguments: ctx, which is a context object provided by the Anchor framework, and msg, an optional text string. The function returns a result value indicating whether the transaction completed successfully or failed.
+
+Within the send_one_sol function, the system_instruction library provided by the Solana program is used to construct a transfer instruction. This instruction is later used in the invoke function to transfer 1 SOL from the from account to the to account. The invoke function also takes an array of AccountInfo references that represent the accounts involved in the transaction.
+
+A message for the recipient is requested as input (which will later be printed via msg!). A variable that manages the sending of SOL could be dynamically implemented as an argument.
+
+The Transaction structure defines the accounts that are used in the transaction, which include the system program account, and the from and to accounts. The from account is defined as a signer account and is marked as mutable, indicating that it will be modified during the transaction. The to account is also marked as mutable, but not as a signing account, which means that no additional signature will be required to modify it during the transaction.
