@@ -6,8 +6,6 @@
 
 </div>
 
-<div style="text-align: justify;">
-
 This program aims to transfer SOL natively on the Solana blockchain to another private key. The implementation was done using Rust to have applicability in desktop or mobile applications that wish to use Rust as the main language. In web development, there are already specific tools such as integrated wallets or desktop extensions that provide the same administrative security for SOL in the account, but they have a centralized structure that has been penetrated in several cases.
 
 The importance of decentralized development of something as critical as payment methods has been implemented in this way of transferring SOL natively with a programming language as secure as Rust. The input of the private key is implemented to use the file system of the operating system in question.
@@ -16,7 +14,6 @@ To sign, the user's private key is required, which must be requested in JSON for
 
 <h3 align="center">Transfer program</h3>
 
-</div>
 
 ```rust
 use anchor_lang::prelude::*;
