@@ -7,7 +7,6 @@ pub mod transfer_one_sol {
     use super::*;
 
     pub fn send_one_sol(ctx: Context<Transaction>, msg: String) -> Result<()> {
-        // Create a transfer instruction to transfer 1 SOL from `from` to `to`
         let transfer = anchor_lang::solana_program::system_instruction::transfer(
             &ctx.accounts.from.key(),
             &ctx.accounts.to.key(),
@@ -31,11 +30,11 @@ pub mod transfer_one_sol {
 
 #[derive(Accounts)]
 pub struct Transaction<'info> {
-    pub system_program: Program<'info, System>, // The System program account
+    pub system_program: Program<'info, System>,
     /// CHECK: This is the signer
     #[account(mut, signer)]
-    pub from: AccountInfo<'info>, // The sender's account
+    pub from: AccountInfo<'info>,
     /// CHECK: This is the receiver
     #[account(mut)]
-    pub to: AccountInfo<'info>, // The receiver's account
+    pub to: AccountInfo<'info>, 
 }
